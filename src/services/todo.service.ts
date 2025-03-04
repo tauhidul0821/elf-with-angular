@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ITodo } from '../core/models/todo'
 import { QueryParam } from '../core/models/query-param';
+import { environment } from '../environments/environment';
 
 @Injectable({ providedIn: 'root'})
 export class TodoService{
@@ -10,15 +11,13 @@ export class TodoService{
     private readonly baseUrl: string;
 
     constructor(private http: HttpClient){
-        this.baseUrl = ''
+        this.baseUrl = `${environment.baseUrl}/todo`
     }
 
     getAll(param: QueryParam): Observable<ITodo[]> {
         const params = new HttpParams()
         .append('page', param.page ?? 1)
         .append('size', param.size ?? 30)
-        .append('search', param.search ?? '')
-        .append('orderBy', param.orderBy ?? '')
 
         return this.http.get<ITodo[]>(this.baseUrl, {params});
     }

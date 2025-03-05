@@ -11,7 +11,7 @@ export class TodoService{
     private readonly baseUrl: string;
 
     constructor(private http: HttpClient){
-        this.baseUrl = `${environment.baseUrl}/todo`
+        this.baseUrl = `${environment.baseUrl}/todos`
     }
 
     getAll(param: QueryParam): Observable<ITodo[]> {
@@ -35,8 +35,8 @@ export class TodoService{
         return this.http.put<ITodo>(`${this.baseUrl}/${todo.id}`, todo)
     }
 
-    delete(todo: ITodo): Observable<unknown>{
-        return this.http.delete<unknown>(`${this.baseUrl}/${todo.id}`)
+    delete(todoId: string): Observable<unknown>{
+        return this.http.delete<unknown>(`${this.baseUrl}/${todoId}`)
     }
 
 }

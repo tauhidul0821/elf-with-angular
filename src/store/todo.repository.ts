@@ -31,26 +31,26 @@ export class TodoRepository{
     }
 
     fetch = (param: QueryParam = {}): Observable<ITodo[]> => {
-        const {page = 1, size = 10 } = param;
+        // const {page = 1, size = 10 } = param;
         return this.todoService.getAll(param).pipe(
             tap((content: any) => {
                 console.log(content)
-                const {items,total } = content;
+                // const {items,total } = content;
 
-                const paginationData = {
-                    currentPage: page,
-                    perPage: size,
-                    total,
-                    lastPage: Math.floor(total/size)
-                };
+                // const paginationData = {
+                //     currentPage: page,
+                //     perPage: size,
+                //     total,
+                //     lastPage: Math.floor(total/size)
+                // };
 
                 store.update(
-                    setEntities(items),
-                    updatePaginationData(paginationData),
-                    setPage(
-                        page,
-                        items.map((i: any) => i.id)
-                    )
+                    setEntities(content),
+                    // updatePaginationData(paginationData),
+                    // setPage(
+                    //     page,
+                    //     items.map((i: any) => i.id)
+                    // )
                 )
             }),
             map((pageContent: PageContent<ITodo>)=> {
@@ -76,10 +76,10 @@ export class TodoRepository{
         );
     }
 
-    delete = (todo: ITodo): Observable<unknown> => {
-        return this.todoService.delete(todo).pipe(
+    delete = (id: string): Observable<unknown> => {
+        return this.todoService.delete(id).pipe(
             tap(() => {
-                store.update(deleteEntities([todo.id]))
+                store.update(deleteEntities([id]))
             })
         )
 

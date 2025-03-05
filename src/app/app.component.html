@@ -5,7 +5,7 @@
   </div>
   <ul class="task-list">
     <li *ngFor="let task of todo$ |async" [ngClass]="{'completed': task.completed}">
-      <input type="checkbox" [(ngModel)]="task.completed" (change)="toggleCompleted(task.id)" />
+      <input type="checkbox" [(ngModel)]="task.completed" (change)="toggleCompleted(task)" />
       <span [class.completed]="task.completed">{{task.title}}</span>
       <button (click)="deleteTask(task.id)">Delete</button>
     </li>

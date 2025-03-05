@@ -1,8 +1,6 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { TodoRepository } from '../store/todo.repository';
 import { Observable } from 'rxjs';
-import { EntityRef } from '../core/models/entity';
 import { map } from "rxjs";
 import { ITodo } from '../core/models/todo';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -11,7 +9,7 @@ import {AsyncPipe, NgClass, NgFor} from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule, NgFor, AsyncPipe, NgClass],
+  imports: [FormsModule, NgFor, AsyncPipe, NgClass],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -32,18 +30,31 @@ export class AppComponent implements OnInit{
         title: this.newTask,
         completed: false
       }
+
+      // call create repository
       console.log('newTodoItem:-', newTodoItem)
+      this.todoRepo.create(newTodoItem).subscribe({
+        next: () => {
+          console.log('added successfully');
+        }
+      })
 
       this.newTask = '';
     }
   }
 
-  toggleCompleted(id: string): void{
-    console.log('updateTask', id)
+  toggleCompleted(todo: ITodo): void{
+    this.todoRepo.update(todo).subscribe({
+      next: () => console.log('updated successfully')
+    })
   }
 
   deleteTask(id: string): void{
-    console.log('deleteTask', id)
+    this.todoRepo.delete(id).subscribe({
+      next: () => {
+        console.log('deleted successfully');
+      }
+    })
   }
 
   ngOnInit(): void {

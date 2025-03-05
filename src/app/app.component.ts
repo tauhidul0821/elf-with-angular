@@ -10,6 +10,7 @@ import {AsyncPipe, NgClass, NgFor} from '@angular/common';
 @Component({
   selector: 'app-root',
   imports: [FormsModule, NgFor, AsyncPipe, NgClass],
+  providers: [TodoRepository],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -25,8 +26,7 @@ export class AppComponent implements OnInit{
 
   addTask(): void{
     if(this.newTask.trim() !== ''){
-      const newTodoItem: ITodo = {
-        id: this.generateUniqueNumber(),
+      const newTodoItem: Omit<ITodo, 'id'> = {
         title: this.newTask,
         completed: false
       }
@@ -61,7 +61,4 @@ export class AppComponent implements OnInit{
     this.todoRepo.fetch().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 
-  generateUniqueNumber(): string {
-    return Date.now() + Math.floor(Math.random() * 1000).toString();
-  }
 }

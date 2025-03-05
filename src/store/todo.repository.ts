@@ -22,6 +22,7 @@ const store = createStore(
 
 @Injectable({providedIn: 'root'})
 export class TodoRepository{
+    todo$: Observable<ITodo[]> = store.pipe(selectAllEntities());
 
     constructor(private todoService: TodoService){}
 
@@ -30,9 +31,10 @@ export class TodoRepository{
     }
 
     fetch = (param: QueryParam = {}): Observable<ITodo[]> => {
-        const {page = 1, size = 50 } = param;
+        const {page = 1, size = 10 } = param;
         return this.todoService.getAll(param).pipe(
             tap((content: any) => {
+                console.log(content)
                 const {items,total } = content;
 
                 const paginationData = {

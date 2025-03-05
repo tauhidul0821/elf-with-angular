@@ -11,6 +11,77 @@
 ```
 
 
+### 1. **Elf State Management**
+
+   - Core library for reactive state management in Angular
+
+   - Key concepts: `createStore`, `select`, `withProps`
+
+   - Used for creating centralized state stores
+
+### 2. **Entity Management with Elf**
+
+   - Managing collections of entities (like normalized data)
+
+   - Key operations: 
+
+     - `addEntities`, `updateEntities`, `deleteEntities`, `upsertEntities`
+
+     - `setEntities`, `selectAllEntities`, `selectEntity`
+
+   - Features: `withEntities`, `entitiesPropsFactory`
+
+### 3. **Pagination Management**
+
+   - Handling paginated data with Elf
+
+   - Key components:
+
+     - `withPagination` (store enhancer)
+
+     - `setPage`, `updatePaginationData`
+
+     - `selectPaginationData`, `selectCurrentPageEntities`
+
+     - Pagination metadata: `PaginationData` type
+
+### 4. **Reactive Programming with RxJS**
+
+   - Working with Observables (`Observable`)
+
+   - Using operators: `map`, `tap`
+
+   - Combining Elf stores with RxJS streams
+
+### 5. **Advanced Store Patterns**
+
+   - Pagination-entity integration
+
+   - Page caching strategies (`skipWhilePageExists`)
+
+   - Bulk operations: `deleteAllEntities`, `deleteAllPages`
+
+   - State composition using multiple enhancers
+
+---
+
+**Key Learning Path:**
+
+1. Start with Elf core concepts (stores, state management)
+
+2. Master entity management patterns
+
+3. Learn pagination integration with entities
+
+4. Practice combining Elf with RxJS observables
+
+5. Explore advanced patterns like page caching and bulk operations
+
+
+
+
+
+
 # Elf State Management in Angular
 
 Elf is a lightweight and flexible state management library for Angular applications, built on RxJS. It provides a simple API for managing state, focusing on immutability and reactivity.

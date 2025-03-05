@@ -26,10 +26,6 @@ export class TodoRepository{
 
     constructor(private todoService: TodoService){}
 
-    setCurrent = (todo: ITodo | null) => {
-        store.update((state) => ({...state, current: todo}))
-    }
-
     fetch = (param: QueryParam = {}): Observable<ITodo[]> => {
         // const {page = 1, size = 10 } = param;
         return this.todoService.getAll(param).pipe(

@@ -38,9 +38,6 @@ export class TodoRepository{
                 this.store.update(
                     setEntities(content) // setEntities replaces all existing entities in the store with a new set of entities. It removes old entities and adds the new ones.
                 )
-            }),
-            catchError((error: HttpErrorResponse) => {
-              return throwError(() => error);
             })
         )
 
@@ -58,10 +55,6 @@ export class TodoRepository{
         return this.todoService.create(newTodo).pipe(
             tap((newTodo: ITodo) => {// Server Response → tap (update store) → Observable emits to subscribers
               this.store.update(addEntities(newTodo));// addEntities is a function in Elf that adds new entities to the store while keeping existing ones.
-            }),
-            catchError((error: HttpErrorResponse) => {
-              console.log(error)
-              return throwError(() => error);
             })
         );
     }
@@ -82,9 +75,6 @@ export class TodoRepository{
         return this.todoService.delete(id).pipe(
             tap(() => {
               this.store.update(deleteEntities([id]))
-            }),
-            catchError((error: HttpErrorResponse) => {
-              return throwError(() => error);
             })
         )
     }

@@ -59,6 +59,11 @@
       "title": "test",
       "element": "#test",
       "intro": "This is test"
+    },
+    {
+      "title": "Start Tour Button",
+      "element": "#start-tour",
+      "intro": "This is start tour button for start tour again"
     }
   ]
 }

@@ -62,12 +62,17 @@ export class AppComponent implements OnInit, AfterViewInit{
 
   ngOnInit(): void {
     this.todoRepo.fetch().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
-
+    //this.introGuideService.startGuideTour();
   }
 
   ngAfterViewInit() {
-    this.introGuideService.initializeGuidTour();
-    this.introGuideService.startGuideTour();
+    this.introGuideService.guideInfo$.subscribe(guideInfo => {
+      console.log(guideInfo)
+      if (guideInfo.length > 0) {
+          this.introGuideService.initializeGuidTour(guideInfo);
+          this.introGuideService.startGuideTour();
+      }
+    });
   }
 
   clickButton(): void{

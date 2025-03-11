@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as introJs from 'intro.js';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../environments/environment';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, catchError, Observable, Subject, switchMap, tap} from 'rxjs';
 
 interface GuideInfo{
   title: string;
@@ -12,34 +12,44 @@ interface GuideInfo{
 
 @Injectable()
 export class IntroGuideService{
-  guideInfo: GuideInfo[] = [
-    {
-      title: 'buttons',
-      element: '#addNew',
-      intro: 'Click to view the buttons111'
-    },
-    {
-      title: 'test',
-      element: '#test',
-      intro: 'This is test'
-    }
-  ];
+  guideInfo: GuideInfo[] = [];
   status= false;
   introJS = introJs.default();
   private readonly baseUrl: string;
+  guideInfo$ = new Subject<GuideInfo[]>
+
+  private statusSubject = new BehaviorSubject<boolean | null>(null);
+  status$ = this.statusSubject.asObservable();
 
   constructor(private http: HttpClient){
     this.baseUrl = `${environment.baseUrl}`;
-    this.getStatus().subscribe(res => {
-      this.status = res
-      console.log('I found status :- ',res);
-      if(res){
-        this.getGuideInfoData().subscribe(res2 => {
-          console.log(res2);
-          this.guideInfo = res2;
-        })
-      }
-    });
+    // this.getStatus().subscribe(res => {
+    //   this.status = res
+    //   console.log('I found status :- ',res);
+    //   if(res){
+    //     this.getGuideInfoData().pipe(
+    //       tap((res3)=> {
+    //         this.guideInfo$.next(res3)
+    //         console.log(res3)
+    //         this.initializeGuidTour(res3);
+    //       })
+    //     ).subscribe();
+    //   }
+    // });
+
+    this.getStatus().pipe(
+      tap(status => this.statusSubject.next(status)),
+      switchMap(status => (status ? this.getGuideInfoData() : [])),
+      tap(guideInfo => {
+        this.guideInfo = guideInfo;
+        this.guideInfo$.next(guideInfo);
+        this.initializeGuidTour(guideInfo);
+      }),
+      catchError((err: HttpErrorResponse)=> {
+        console.error('Error fetching guide data', err);
+        return [];
+      })
+    ).subscribe()
   }
 
   getStatus(): Observable<boolean> {
@@ -56,13 +66,9 @@ export class IntroGuideService{
     })
   }
 
-  initializeGuidTour(): void{
-    this.startTour();
-  }
-
-  startTour(){
+  initializeGuidTour(guideInfo: GuideInfo[]): void{
     this.introJS.setOptions({
-      steps: this.guideInfo,
+      steps: guideInfo,
       showProgress: true,
       disableInteraction: false
     });

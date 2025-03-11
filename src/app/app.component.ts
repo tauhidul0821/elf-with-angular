@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, OnInit} from '@angular/core';
 import { TodoRepository } from '../store/todo.repository';
 import { Observable } from 'rxjs';
 import { map } from "rxjs";
@@ -6,6 +6,7 @@ import { ITodo } from '../core/models/todo';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormsModule} from '@angular/forms';
 import {AsyncPipe, NgClass, NgFor} from '@angular/common';
+import * as introJs from 'intro.js';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +15,11 @@ import {AsyncPipe, NgClass, NgFor} from '@angular/common';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, AfterViewInit{
   newTask: string = '';
+  title = 'testbed';
+  introJS = introJs.default();
+  showBtns = false;
 
   todo$!: Observable<ITodo[]>;
 
@@ -59,6 +63,45 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
     this.todoRepo.fetch().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+
+  }
+
+  ngAfterViewInit() {
+    this.startTour();
+
+    this.introJS.start();
+  }
+
+  clickButton(): void{
+    this.introJS.start();
+  }
+
+  startTour(){
+    this.introJS.setOptions({
+      steps: [
+        {
+
+          title: 'buttons',
+          element: '#addNew',
+          intro: 'Click to view the buttons111'
+        },
+        {
+
+          title: 'test',
+          element: '#test',
+          intro: 'This is test'
+        }
+      ],
+      showProgress: true,
+      disableInteraction: false
+    });
+    //
+    // this.introJS.start();
+    // this.introJS.onbeforechange((): any => {
+    //   console.log("new step");
+    //   this.introJS.refresh();
+    // });
+
   }
 
 }

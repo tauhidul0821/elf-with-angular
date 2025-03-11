@@ -12,7 +12,18 @@ interface GuideInfo{
 
 @Injectable({ providedIn: 'root'})
 export class IntroGuideService{
-  guideInfo: GuideInfo[] | undefined;
+  guideInfo: GuideInfo[] = [
+    {
+      title: 'buttons',
+      element: '#addNew',
+      intro: 'Click to view the buttons111'
+    },
+    {
+      title: 'test',
+      element: '#test',
+      intro: 'This is test'
+    }
+  ];
   status= false;
   introJS = introJs.default();
   private readonly baseUrl: string;
@@ -22,12 +33,12 @@ export class IntroGuideService{
     this.getStatus().subscribe(res => {
       this.status = res
       console.log('I found status :- ',res);
-      if(res){
-        this.getGuideInfoData().subscribe(res2 => {
-          console.log(res2);
-          this.guideInfo = res2;
-        })
-      }
+      // if(res){
+      //   this.getGuideInfoData().subscribe(res2 => {
+      //     console.log(res2);
+      //     this.guideInfo = res2;
+      //   })
+      // }
     });
   }
 
@@ -39,6 +50,13 @@ export class IntroGuideService{
     return this.http.get<GuideInfo[]>(this.baseUrl + '/guide-info-doc');
   }
 
+  fetchGuideInfoData(): void{
+    this.getGuideInfoData().subscribe(res => {
+      console.log(res);
+      this.guideInfo = res;
+    })
+  }
+
   initializeGuidTour(): void{
     this.startTour();
   }
@@ -46,25 +64,17 @@ export class IntroGuideService{
   startTour(){
     this.introJS.setOptions({
       steps: this.guideInfo,
-      //   [
-      //   {
-      //     title: 'buttons',
-      //     element: '#addNew',
-      //     intro: 'Click to view the buttons111'
-      //   },
-      //   {
-      //     title: 'test',
-      //     element: '#test',
-      //     intro: 'This is test'
-      //   }
-      // ],
       showProgress: true,
       disableInteraction: false
     });
   }
 
   startGuideTour(){
-      this.introJS.start();
+    if(this.guideInfo.length === 0){
+      console.log('Tour steps are not loaded yet.')
+      return;
+    }
+    this.introJS.start();
   }
 
 }

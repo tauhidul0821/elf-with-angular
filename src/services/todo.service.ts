@@ -5,7 +5,7 @@ import { ITodo } from '../core/models/todo'
 import { QueryParam } from '../core/models/query-param';
 import { environment } from '../environments/environment';
 
-@Injectable({ providedIn: 'root'})
+@Injectable()
 export class TodoService{
 
     private readonly baseUrl: string;

@@ -24,7 +24,7 @@ export class AppComponent implements OnInit, AfterViewInit{
               private destroyRef: DestroyRef,
               private introGuideService: IntroGuideService){
     this.todo$ = this.todoRepo.todo$.pipe(map((todo: ITodo[]) => todo.map((e)=> ({id: e.id, title: e.title, completed: e.completed}))));
-    this.introGuideService.fetchGuideInfoData();
+    // this.introGuideService.fetchGuideInfoData();
   }
 
   addTask(): void{

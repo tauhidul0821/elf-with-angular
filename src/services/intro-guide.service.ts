@@ -10,7 +10,7 @@ interface GuideInfo{
   intro: string;
 }
 
-@Injectable({ providedIn: 'root'})
+@Injectable()
 export class IntroGuideService{
   guideInfo: GuideInfo[] = [
     {
@@ -33,12 +33,12 @@ export class IntroGuideService{
     this.getStatus().subscribe(res => {
       this.status = res
       console.log('I found status :- ',res);
-      // if(res){
-      //   this.getGuideInfoData().subscribe(res2 => {
-      //     console.log(res2);
-      //     this.guideInfo = res2;
-      //   })
-      // }
+      if(res){
+        this.getGuideInfoData().subscribe(res2 => {
+          console.log(res2);
+          this.guideInfo = res2;
+        })
+      }
     });
   }
 
@@ -52,7 +52,6 @@ export class IntroGuideService{
 
   fetchGuideInfoData(): void{
     this.getGuideInfoData().subscribe(res => {
-      console.log(res);
       this.guideInfo = res;
     })
   }

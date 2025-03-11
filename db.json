@@ -47,5 +47,18 @@
       "title": "fff",
       "completed": false
     }
+  ],
+  "guide-info-status": true,
+  "guide-info-doc": [
+    {
+      "title": "buttons",
+      "element": "#addNew",
+      "intro": "Click to view the buttons111"
+    },
+    {
+      "title": "test",
+      "element": "#test",
+      "intro": "This is test"
+    }
   ]
 }

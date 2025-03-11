@@ -7,11 +7,12 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormsModule} from '@angular/forms';
 import {AsyncPipe, NgClass, NgFor} from '@angular/common';
 import * as introJs from 'intro.js';
+import {IntroGuideService} from '../services/intro-guide.service';
 
 @Component({
   selector: 'app-root',
   imports: [FormsModule, NgFor, AsyncPipe, NgClass],
-  providers: [TodoRepository],
+  providers: [TodoRepository, IntroGuideService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -19,12 +20,12 @@ export class AppComponent implements OnInit, AfterViewInit{
   newTask: string = '';
   title = 'testbed';
   introJS = introJs.default();
-  showBtns = false;
 
   todo$!: Observable<ITodo[]>;
 
   constructor(private todoRepo: TodoRepository,
-    private destroyRef: DestroyRef){
+              private destroyRef: DestroyRef,
+              private introGuideService: IntroGuideService){
     this.todo$ = this.todoRepo.todo$.pipe(map((todo: ITodo[]) => todo.map((e)=> ({id: e.id, title: e.title, completed: e.completed}))));
   }
 
@@ -80,13 +81,11 @@ export class AppComponent implements OnInit, AfterViewInit{
     this.introJS.setOptions({
       steps: [
         {
-
           title: 'buttons',
           element: '#addNew',
           intro: 'Click to view the buttons111'
         },
         {
-
           title: 'test',
           element: '#test',
           intro: 'This is test'
@@ -95,13 +94,5 @@ export class AppComponent implements OnInit, AfterViewInit{
       showProgress: true,
       disableInteraction: false
     });
-    //
-    // this.introJS.start();
-    // this.introJS.onbeforechange((): any => {
-    //   console.log("new step");
-    //   this.introJS.refresh();
-    // });
-
   }
-
 }

@@ -1,7 +1,7 @@
 <main class="todo-container">
   <div class="add-task">
     <input type="text" [(ngModel)]="newTask" placeholder="Enter new task" />
-    <button id="addNew" (click)="addTask()"> Add</button>
+    <button tourAnchor="addNew" (click)="addTask()"> Add</button>
   </div>
   <ul class="task-list">
     <li *ngFor="let task of todo$ |async" [ngClass]="{'completed': task.completed}">
@@ -10,6 +10,8 @@
       <button (click)="deleteTask(task.id)">Delete</button>
     </li>
   </ul>
-  <p id="test">This is test</p>
+  <p tourAnchor="test">This is test</p>
   <button (click)="clickButton()" id="start-tour">Start Tour</button>
 </main>
+
+<tour-step-template></tour-step-template>

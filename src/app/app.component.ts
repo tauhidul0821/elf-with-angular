@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, DestroyRef, OnInit} from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import { TodoRepository } from '../store/todo.repository';
 import { Observable } from 'rxjs';
 import { map } from "rxjs";
@@ -7,10 +7,11 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormsModule} from '@angular/forms';
 import {AsyncPipe, NgClass, NgFor} from '@angular/common';
 import {IntroGuideService} from '../services/intro-guide.service';
+import {IStepOption, TourAnchorPrimeNgDirective, TourService, TourStepTemplateComponent} from 'ngx-ui-tour-primeng';
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule, NgFor, AsyncPipe, NgClass],
+  imports: [FormsModule, NgFor, AsyncPipe, NgClass, TourAnchorPrimeNgDirective, TourStepTemplateComponent],
   providers: [TodoRepository, IntroGuideService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -19,6 +20,23 @@ export class AppComponent implements OnInit, AfterViewInit{
   newTask: string = '';
   title = 'testbed';
   todo$!: Observable<ITodo[]>;
+
+  public readonly tourService = inject(TourService);
+
+  readonly tourSteps: IStepOption[] = [
+    {
+      anchorId: 'addNew',
+      content: 'This is Add New',
+      title: 'Home Menu',
+      enableBackdrop: true
+    },
+    {
+      anchorId: 'test',
+      content: 'This is test',
+      title: 'test Menu',
+      enableBackdrop: true
+    }
+  ]
 
   constructor(private todoRepo: TodoRepository,
               private destroyRef: DestroyRef,
@@ -63,19 +81,24 @@ export class AppComponent implements OnInit, AfterViewInit{
   ngOnInit(): void {
     this.todoRepo.fetch().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
     //this.introGuideService.startGuideTour();
+
+    this.tourService.initialize(this.tourSteps, {});
   }
 
   ngAfterViewInit() {
-    this.introGuideService.guideInfo$.subscribe(guideInfo => {
-      console.log(guideInfo)
-      if (guideInfo.length > 0) {
-          this.introGuideService.initializeGuidTour(guideInfo);
-          this.introGuideService.startGuideTour();
-      }
-    });
+    // this.introGuideService.guideInfo$.subscribe(guideInfo => {
+    //   console.log(guideInfo)
+    //   if (guideInfo.length > 0) {
+    //       this.introGuideService.initializeGuidTour(guideInfo);
+    //       this.introGuideService.startGuideTour();
+    //   }
+    // });
   }
 
   clickButton(): void{
-    this.introGuideService.startGuideTour();
+    // this.introGuideService.startGuideTour();
+    setTimeout(() => {
+      this.tourService.start();
+    }, 100)
   }
 }

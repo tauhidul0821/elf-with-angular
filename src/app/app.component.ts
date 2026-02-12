@@ -5,12 +5,12 @@ import { map } from "rxjs";
 import { ITodo } from '../core/models/todo';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormsModule} from '@angular/forms';
-import {AsyncPipe, NgClass, NgFor} from '@angular/common';
 import {IntroGuideService} from '../services/intro-guide.service';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule, NgFor, AsyncPipe, NgClass],
+  imports: [FormsModule, RouterOutlet],
   providers: [TodoRepository, IntroGuideService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

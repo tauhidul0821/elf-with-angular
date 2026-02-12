@@ -1,0 +1,171 @@
+<div class="github-demo-container">
+  <h1>🚀 GitHub REST API Demo</h1>
+  <p class="subtitle">Create and manage documentation files in your GitHub repository</p>
+
+  <div class="config-section">
+    <h2>📝 Repository Configuration</h2>
+    
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="owner">Repository Owner *</label>
+        <input 
+          type="text" 
+          id="owner" 
+          [(ngModel)]="owner" 
+          placeholder="your-github-username"
+          [disabled]="isLoading"
+        />
+        <small>Your GitHub username or organization name</small>
+      </div>
+
+      <div class="form-group">
+        <label for="repo">Repository Name *</label>
+        <input 
+          type="text" 
+          id="repo" 
+          [(ngModel)]="repo" 
+          placeholder="test-repo"
+          [disabled]="isLoading"
+        />
+        <small>Name of your GitHub repository</small>
+      </div>
+
+      <div class="form-group">
+        <label for="branch">Branch</label>
+        <input 
+          type="text" 
+          id="branch" 
+          [(ngModel)]="branch" 
+          placeholder="main"
+          [disabled]="isLoading"
+        />
+        <small>Target branch (default: main)</small>
+      </div>
+
+      <div class="form-group">
+        <label for="filePath">File Path *</label>
+        <input 
+          type="text" 
+          id="filePath" 
+          [(ngModel)]="filePath" 
+          placeholder="docs/README.md"
+          [disabled]="isLoading"
+        />
+        <small>Path where file will be created/updated</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h2>📄 File Content</h2>
+    
+    <div class="form-group">
+      <label for="commitMessage">Commit Message *</label>
+      <input 
+        type="text" 
+        id="commitMessage" 
+        [(ngModel)]="commitMessage" 
+        placeholder="Add/Update documentation"
+        [disabled]="isLoading"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="fileContent">Content</label>
+      <textarea 
+        id="fileContent" 
+        [(ngModel)]="fileContent" 
+        rows="12"
+        [disabled]="isLoading"
+      ></textarea>
+      <button 
+        (click)="appendTimestamp()" 
+        class="btn-secondary"
+        [disabled]="isLoading"
+      >
+        ⏰ Append Timestamp
+      </button>
+    </div>
+  </div>
+
+  <div class="actions-section">
+    <h2>🎯 Actions</h2>
+    
+    <div class="button-group">
+      <button 
+        (click)="fetchFile()" 
+        class="btn-info"
+        [disabled]="isLoading"
+      >
+        📥 Fetch File
+      </button>
+
+      <button 
+        (click)="createFile()" 
+        class="btn-success"
+        [disabled]="isLoading"
+      >
+        ➕ Create File
+      </button>
+
+      <button 
+        (click)="updateFile()" 
+        class="btn-primary"
+        [disabled]="isLoading"
+      >
+        ✏️ Update File
+      </button>
+
+      <button 
+        (click)="createOrUpdateFile()" 
+        class="btn-primary-alt"
+        [disabled]="isLoading"
+      >
+        🔄 Create or Update
+      </button>
+
+      <button 
+        (click)="deleteFile()" 
+        class="btn-danger"
+        [disabled]="isLoading"
+      >
+        🗑️ Delete File
+      </button>
+    </div>
+  </div>
+
+  <div class="status-section" *ngIf="statusMessage">
+    <div class="status-message" [class.loading]="isLoading">
+      <span *ngIf="isLoading" class="loader">⏳</span>
+      {{ statusMessage }}
+    </div>
+    <button (click)="clearStatus()" class="btn-close" *ngIf="!isLoading">✕</button>
+  </div>
+
+  <div class="info-section">
+    <h2>ℹ️ Instructions</h2>
+    <ol>
+      <li><strong>Setup:</strong> Fill in your repository owner, repository name, and file path</li>
+      <li><strong>Create:</strong> Click "Create File" to create a new file (will fail if file exists)</li>
+      <li><strong>Fetch:</strong> Click "Fetch File" to retrieve existing file content and SHA</li>
+      <li><strong>Update:</strong> Modify content and click "Update File" (requires SHA from fetch)</li>
+      <li><strong>Smart Mode:</strong> Use "Create or Update" - automatically handles both cases</li>
+      <li><strong>Delete:</strong> Click "Delete File" to remove the file (requires SHA from fetch)</li>
+    </ol>
+
+    <div class="tips">
+      <h3>💡 Tips:</h3>
+      <ul>
+        <li>The GitHub token is already configured in environment.ts</li>
+        <li>Make sure your token has <code>repo</code> scope permissions</li>
+        <li>The "Create or Update" button is the easiest - it checks if file exists first</li>
+        <li>File content is automatically Base64 encoded/decoded</li>
+        <li>Check browser console for detailed API responses</li>
+      </ul>
+    </div>
+
+    <div *ngIf="currentFileSha" class="sha-info">
+      <strong>Current File SHA:</strong> <code>{{ currentFileSha }}</code>
+    </div>
+  </div>
+</div>
